@@ -1,0 +1,198 @@
+{
+  "scopeName": "source.kryon",
+  "patterns": [
+    {"include": "#comments"},
+    {"include": "#strings"},
+    {"include": "#keywords"},
+    {"include": "#types"},
+    {"include": "#constants"},
+    {"include": "#functions"},
+    {"include": "#variables"},
+    {"include": "#operators"},
+    {"include": "#numbers"},
+    {"include": "#widgets"},
+    {"include": "#properties"},
+    {"include": "#module-access"}
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.kryon",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.kryon",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.kryon",
+              "match": "\\\\."
+            },
+            {
+              "name": "constant.other.color.rgb.kryon",
+              "match": "#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}"
+            }
+          ]
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.kryon",
+          "match": "\\b(use|fn|var|return|if|else|for|while|do|switch|case|break|continue|fallthrough|default)\\b"
+        },
+        {
+          "name": "keyword.operator.pointer.kryon",
+          "match": "\\b(ref|nil)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.builtin.kryon",
+          "match": "\\b(int|real|string|byte|void|fn|self|array|list|dict|chan|bool|any)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.kryon",
+          "match": "\\b(true|false|nil)\\b"
+        },
+        {
+          "name": "constant.language.kryon",
+          "match": "\\b(ZP)\\b"
+        },
+        {
+          "name": "constant.other.kryon",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "meta.function.declaration.kryon",
+          "match": "(fn)\\s+([a-z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": {"name": "keyword.function.kryon"},
+            "2": {"name": "entity.name.function.kryon"}
+          }
+        },
+        {
+          "name": "support.function.builtin.kryon",
+          "match": "\\b(print|println|flush|spawn|exit|raise|real|int|string|len|append|delete|load|newimage|colormix|draw|line|fillellipse|text|rect)\\b"
+        },
+        {
+          "name": "entity.name.function.kryon",
+          "match": "(?<!\\w)([a-z_][a-zA-Z0-9_]*)(?=\\s*\\()"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "meta.variable.declaration.kryon",
+          "match": "\\b(var)\\s+([a-z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": {"name": "keyword.declaration.kryon"},
+            "2": {"name": "variable.other.kryon"}
+          }
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arrow.kryon",
+          "match": "->"
+        },
+        {
+          "name": "keyword.operator.assignment.kryon",
+          "match": "(?<![=!<>/])=(?![=>])"
+        },
+        {
+          "name": "keyword.operator.pipe.kryon",
+          "match": "@"
+        },
+        {
+          "name": "keyword.operator.comparison.kryon",
+          "match": "==|!=|<=|>=|<|>"
+        },
+        {
+          "name": "keyword.operator.logical.kryon",
+          "match": "&&|\\|\\||!"
+        },
+        {
+          "name": "keyword.operator.arithmetic.kryon",
+          "match": "\\+|\\-|\\*|\\/|%|\\+\\+|\\-\\-|\\+=|\\-=|\\*=|/=|%="
+        },
+        {
+          "name": "keyword.operator.bitwise.kryon",
+          "match": "&|\\||\\^|~|<<|>>|&=|\\|=|\\^=|<<=|>>="
+        },
+        {
+          "name": "punctuation.separator.kryon",
+          "match": ";|,|:"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.kryon",
+          "match": "\\b[0-9]+\\b"
+        },
+        {
+          "name": "constant.numeric.float.kryon",
+          "match": "\\b[0-9]+\\.[0-9]+([eE][+-]?[0-9]+)?\\b"
+        },
+        {
+          "name": "constant.numeric.hex.kryon",
+          "match": "\\b0[xX][0-9a-fA-F]+\\b"
+        }
+      ]
+    },
+    "widgets": {
+      "patterns": [
+        {
+          "name": "entity.name.class.widget.kryon",
+          "match": "\\b(Window|Label|Button|Entry|Checkbutton|Radiobutton|Listbox|Scale|Frame|Column|Row|Center|Canvas|Text|Menu|Scrollbar|Panedwindow|Notebook|Progress|Spinbox|Combobox|Tree|Image)\\b"
+        }
+      ]
+    },
+    "properties": {
+      "patterns": [
+        {
+          "name": "variable.parameter.property.kryon",
+          "match": "\\b(title|text|width|height|bg|fg|font|x|y|value|from|to|orient|length|type|r|min|max|dx|dy)\\b(?=\\s*=)"
+        },
+        {
+          "name": "entity.name.function.handler.kryon",
+          "match": "\\b(onInit|onDraw|onClick|onChecked|onSelected|onChanged|onScaled|onEntry|onFocus|onBlur|onMouse)\\b(?=\\s*=)"
+        }
+      ]
+    },
+    "module-access": {
+      "patterns": [
+        {
+          "name": "variable.other.module.kryon",
+          "match": "[a-z_][a-zA-Z0-9_]*(?=->)"
+        },
+        {
+          "name": "keyword.operator.arrow.kryon",
+          "match": "->"
+        }
+      ]
+    }
+  }
+}
