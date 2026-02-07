@@ -1,0 +1,86 @@
+{
+  "scopeName": "source.ktml",
+  "patterns": [
+    {"include": "#comments"},
+    {"include": "#block-keywords"},
+    {"include": "#self-closing-tags"},
+    {"include": "#properties"},
+    {"include": "#strings"},
+    {"include": "#inline-markup"},
+    {"include": "#brackets"},
+    {"include": "#operators"},
+    {"include": "#list-items"}
+  ],
+  "repository": {
+    "comments": {
+      "name": "comment.line.number-sign.ktml",
+      "match": "^\\s*#.*$"
+    },
+    "block-keywords": {
+      "name": "keyword.control.ktml",
+      "match": "\\b(Site|Header|Nav|Section|Text|Note|Code|List)\\b"
+    },
+    "self-closing-tags": {
+      "name": "entity.name.tag.self-closing.ktml",
+      "match": "\\b(Title)\\b"
+    },
+    "properties": {
+      "name": "variable.parameter.property.ktml",
+      "match": "\\b(title|tagline|theme)\\b(?=\\s*=)"
+    },
+    "strings": {
+      "name": "string.quoted.double.ktml",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.other.url.ktml",
+          "match": "https?:\\/\\/[^\"]*"
+        }
+      ]
+    },
+    "inline-markup": {
+      "patterns": [
+        {
+          "name": "markup.bold.ktml",
+          "begin": "\\[b\\]",
+          "end": "\\[\\/b\\]"
+        },
+        {
+          "name": "markup.italic.ktml",
+          "begin": "\\[i\\]",
+          "end": "\\[\\/i\\]"
+        },
+        {
+          "name": "markup.link.ktml",
+          "begin": "\\[Link\\s+\"",
+          "end": "\"\\s+\"[^\"]*\"\\]",
+          "patterns": [
+            {
+              "name": "string.quoted.double.ktml",
+              "match": "\"[^\"]*\""
+            }
+          ]
+        }
+      ]
+    },
+    "brackets": {
+      "patterns": [
+        {"name": "punctuation.definition.block.begin.ktml", "match": "\\{"},
+        {"name": "punctuation.definition.block.end.ktml", "match": "\\}"},
+        {"name": "punctuation.definition.nav.begin.ktml", "match": "\\[(?!/?[bi]\\]|/?Link\\s)"},
+        {"name": "punctuation.definition.nav.end.ktml", "match": "\\](?!</[bi]|Link)"}
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {"name": "keyword.operator.assignment.ktml", "match": "(?<=\\s)=(?=\\s)"},
+        {"name": "punctuation.separator.key-value.ktml", "match": ":"}
+      ]
+    },
+    "list-items": {
+      "name": "punctuation.definition.list-item.ktml",
+      "match": "^\\s*-\\s"
+    }
+  }
+}
