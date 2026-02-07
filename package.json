@@ -1,7 +1,7 @@
 {
   "name": "kryon-language",
   "displayName": "Kryon Language Support",
-  "description": "Syntax highlighting for Kryon programming language",
+  "description": "Syntax highlighting for Kryon and Limbo programming languages",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.75.0"
@@ -9,21 +9,36 @@
   "icon": "icons/kryon.png",
   "categories": ["Languages"],
   "contributes": {
-    "languages": [{
-      "id": "kryon",
-      "aliases": ["Kryon", "kryon"],
-      "extensions": [".kry"],
-      "configuration": "./language-configuration.json",
-      "icon": {
-        "light": "./icons/kryon.png",
-        "dark": "./icons/kryon.png"
+    "languages": [
+      {
+        "id": "kryon",
+        "aliases": ["Kryon", "kryon"],
+        "extensions": [".kry"],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/kryon.png",
+          "dark": "./icons/kryon.png"
+        }
+      },
+      {
+        "id": "limbo",
+        "aliases": ["Limbo", "limbo"],
+        "extensions": [".b"],
+        "configuration": "./language-configuration-limbo.json"
       }
-    }],
-    "grammars": [{
-      "language": "kryon",
-      "scopeName": "source.kryon",
-      "path": "./syntaxes/kryon.tmLanguage.json"
-    }]
+    ],
+    "grammars": [
+      {
+        "language": "kryon",
+        "scopeName": "source.kryon",
+        "path": "./syntaxes/kryon.tmLanguage.json"
+      },
+      {
+        "language": "limbo",
+        "scopeName": "source.limbo",
+        "path": "./syntaxes/limbo.tmLanguage.json"
+      }
+    ]
   },
   "repository": {
     "type": "git",

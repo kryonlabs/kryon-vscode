@@ -1,0 +1,205 @@
+{
+  "scopeName": "source.limbo",
+  "patterns": [
+    {"include": "#comments"},
+    {"include": "#strings"},
+    {"include": "#keywords"},
+    {"include": "#types"},
+    {"include": "#constants"},
+    {"include": "#numbers"},
+    {"include": "#functions"},
+    {"include": "#adt"},
+    {"include": "#module-declaration"},
+    {"include": "#operators"},
+    {"include": "#module-access"}
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.limbo",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.limbo",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.limbo",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.limbo",
+          "match": "\\b(if|else|case|for|while|do|return|break|continue|raise|exception|alt)\\b"
+        },
+        {
+          "name": "keyword.declaration.limbo",
+          "match": "\\b(implement|include|module|import|fn|con|type|fixed)\\b"
+        },
+        {
+          "name": "keyword.other.limbo",
+          "match": "\\b(spawn|of|self)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.builtin.limbo",
+          "match": "\\b(byte|int|big|real|string|void|chan|list|array|ref|adt|fn)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.limbo",
+          "match": "\\b(nil)\\b"
+        },
+        {
+          "name": "constant.other.limbo",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.limbo",
+          "match": "\\b[0-9]+\\b"
+        },
+        {
+          "name": "constant.numeric.hex.limbo",
+          "match": "\\b0[xX][0-9a-fA-F]+\\b"
+        },
+        {
+          "name": "constant.numeric.float.limbo",
+          "match": "\\b[0-9]+\\.[0-9]+([eE][+-]?[0-9]+)?\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "meta.function.declaration.limbo",
+          "match": "(fn)\\s+([a-z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": {"name": "keyword.function.limbo"},
+            "2": {"name": "entity.name.function.limbo"}
+          }
+        },
+        {
+          "name": "entity.name.function.limbo",
+          "match": "(?<![\\w->])([a-z_][a-zA-Z0-9_]*)(?=\\s*\\()"
+        }
+      ]
+    },
+    "adt": {
+      "patterns": [
+        {
+          "name": "meta.adt.limbo",
+          "match": "(\\b([A-Z][a-zA-Z0-9_]*)\\b)\\s*(:)\\s*(adt)\\b",
+          "captures": {
+            "1": {"name": "entity.name.type.adt.limbo"},
+            "2": {"name": "entity.name.type.adt.limbo"},
+            "3": {"name": "punctuation.separator.key-value.limbo"},
+            "4": {"name": "storage.type.adt.limbo"}
+          }
+        },
+        {
+          "name": "entity.name.type.adt.limbo",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b(?=\\s*\\{)"
+        }
+      ]
+    },
+    "module-declaration": {
+      "patterns": [
+        {
+          "name": "meta.module.declaration.limbo",
+          "match": "(\\b([A-Z][a-zA-Z0-9_]*)\\b)\\s*(:)\\s*(module)\\b",
+          "captures": {
+            "1": {"name": "entity.name.module.limbo"},
+            "2": {"name": "entity.name.module.limbo"},
+            "3": {"name": "punctuation.separator.key-value.limbo"},
+            "4": {"name": "storage.type.module.limbo"}
+          }
+        },
+        {
+          "name": "keyword.declaration.implement.limbo",
+          "match": "\\b(implement)\\s+(\\b[A-Z][a-zA-Z0-9_]*\\b)",
+          "captures": {
+            "1": {"name": "keyword.declaration.limbo"},
+            "2": {"name": "entity.name.module.limbo"}
+          }
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.channel.limbo",
+          "match": "<-|=>"
+        },
+        {
+          "name": "keyword.operator.module.limbo",
+          "match": "->"
+        },
+        {
+          "name": "keyword.operator.assignment.limbo",
+          "match": ":="
+        },
+        {
+          "name": "keyword.operator.assignment.simple.limbo",
+          "match": "(?<![=!<>/])=(?![=>])"
+        },
+        {
+          "name": "keyword.operator.comparison.limbo",
+          "match": "==|!=|<=|>=|<|>"
+        },
+        {
+          "name": "keyword.operator.logical.limbo",
+          "match": "&&|\\|\\||!|&|\\||\\^"
+        },
+        {
+          "name": "keyword.operator.arithmetic.limbo",
+          "match": "\\+|\\-|\\*|\\/|%|\\+\\+|\\-\\-|\\+=|\\-=|\\*=|/=|%="
+        },
+        {
+          "name": "keyword.operator.exponent.limbo",
+          "match": "\\*\\*"
+        },
+        {
+          "name": "keyword.operator.bitwise.limbo",
+          "match": "~|<<|>>|&=|\\|=|\\^=|<<=|>>="
+        },
+        {
+          "name": "punctuation.separator.limbo",
+          "match": ";|,|:"
+        }
+      ]
+    },
+    "module-access": {
+      "patterns": [
+        {
+          "name": "variable.other.module.limbo",
+          "match": "[a-z_][a-zA-Z0-9_]*(?=->)"
+        },
+        {
+          "name": "keyword.operator.arrow.limbo",
+          "match": "->"
+        }
+      ]
+    }
+  }
+}
