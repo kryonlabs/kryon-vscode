@@ -3,13 +3,17 @@
   "patterns": [
     {"include": "#comments"},
     {"include": "#strings"},
+    {"include": "#composite-types"},
     {"include": "#keywords"},
     {"include": "#types"},
     {"include": "#constants"},
     {"include": "#numbers"},
     {"include": "#functions"},
+    {"include": "#built-in-functions"},
     {"include": "#adt"},
     {"include": "#module-declaration"},
+    {"include": "#module-variable"},
+    {"include": "#tuple-declaration"},
     {"include": "#operators"},
     {"include": "#module-access"}
   ],
@@ -57,7 +61,28 @@
       "patterns": [
         {
           "name": "storage.type.builtin.limbo",
-          "match": "\\b(byte|int|big|real|string|void|chan|list|array|ref|adt|fn)\\b"
+          "match": "\\b(byte|int|big|real|string|void)\\b"
+        },
+        {
+          "name": "storage.type.composite.limbo",
+          "match": "\\b(chan|list|array|ref|adt|fn)\\b"
+        }
+      ]
+    },
+    "composite-types": {
+      "patterns": [
+        {
+          "name": "meta.type.composite.limbo",
+          "match": "\\b(array|chan|list|ref)\\s+of\\s+(\\w+(?:\\s*\\.\\s*\\w+)*(?:\\s*\\[\\s*\\])?)",
+          "captures": {
+            "1": {"name": "storage.type.composite.limbo"},
+            "2": {"name": "keyword.operator.word.limbo"},
+            "3": {"name": "storage.type.builtin.limbo entity.name.type.adt.limbo"}
+          }
+        },
+        {
+          "name": "keyword.operator.word.limbo",
+          "match": "\\bof\\b"
         }
       ]
     },
@@ -66,10 +91,6 @@
         {
           "name": "constant.language.limbo",
           "match": "\\b(nil)\\b"
-        },
-        {
-          "name": "constant.other.limbo",
-          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
         }
       ]
     },
@@ -81,7 +102,7 @@
         },
         {
           "name": "constant.numeric.hex.limbo",
-          "match": "\\b0[xX][0-9a-fA-F]+\\b"
+          "match": "\\b(0[xX][0-9a-fA-F]+|[0-9]+[rR][0-9a-zA-Z]+)\\b"
         },
         {
           "name": "constant.numeric.float.limbo",
@@ -93,10 +114,11 @@
       "patterns": [
         {
           "name": "meta.function.declaration.limbo",
-          "match": "(fn)\\s+([a-z_][a-zA-Z0-9_]*)",
+          "match": "(\\b[a-z_][a-zA-Z0-9_]*\\b)\\s*(:)\\s*(fn)\\b",
           "captures": {
-            "1": {"name": "keyword.function.limbo"},
-            "2": {"name": "entity.name.function.limbo"}
+            "1": {"name": "entity.name.function.limbo"},
+            "2": {"name": "punctuation.separator.key-value.limbo"},
+            "3": {"name": "keyword.function.limbo"}
           }
         },
         {
@@ -105,10 +127,18 @@
         }
       ]
     },
+    "built-in-functions": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.limbo",
+          "match": "\\b(load|print|fprint| sprint|fildes|open|create|read|write|seek|close|stat|wstat|dial|announce|listen|accept|spawn|alt|raise|exception|sysname|pctl|chan|array|real|int|string|big|byte|malloc|free|strlen|strcat|strcmp|strcpy|strchr|strrchr|tokenize|hexdigest|unhex)\\b"
+        }
+      ]
+    },
     "adt": {
       "patterns": [
         {
-          "name": "meta.adt.limbo",
+          "name": "meta.adt.declaration.limbo",
           "match": "(\\b([A-Z][a-zA-Z0-9_]*)\\b)\\s*(:)\\s*(adt)\\b",
           "captures": {
             "1": {"name": "entity.name.type.adt.limbo"},
@@ -119,7 +149,14 @@
         },
         {
           "name": "entity.name.type.adt.limbo",
-          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b(?=\\s*\\{)"
+          "match": "\\b([A-Z][a-zA-Z0-9_]*)(?=\\s*[\\{\\}])"
+        },
+        {
+          "name": "support.type.adt-ref.limbo",
+          "match": "\\b([A-Z][a-zA-Z0-9_]*)(?=\\s*\\.)",
+          "captures": {
+            "1": {"name": "entity.name.type.adt.limbo"}
+          }
         }
       ]
     },
@@ -136,11 +173,58 @@
           }
         },
         {
-          "name": "keyword.declaration.implement.limbo",
+          "name": "meta.module.implement.limbo",
           "match": "\\b(implement)\\s+(\\b[A-Z][a-zA-Z0-9_]*\\b)",
           "captures": {
             "1": {"name": "keyword.declaration.limbo"},
             "2": {"name": "entity.name.module.limbo"}
+          }
+        },
+        {
+          "name": "meta.module.include.limbo",
+          "match": "\\b(include)\\s+(\")",
+          "captures": {
+            "1": {"name": "keyword.declaration.limbo"},
+            "2": {"name": "punctuation.definition.string.begin.limbo"}
+          }
+        },
+        {
+          "name": "meta.module.import.limbo",
+          "match": "\\b([a-z_][a-zA-Z0-9_]*\\s*(?:,\\s*[a-z_][a-zA-Z0-9_]*\\s*)*)\\s*:\\s*(import)\\b",
+          "captures": {
+            "1": {"name": "entity.name.function.limbo variable.other.import.limbo"},
+            "2": {"name": "keyword.declaration.import.limbo"}
+          }
+        }
+      ]
+    },
+    "module-variable": {
+      "patterns": [
+        {
+          "name": "meta.module.variable.limbo",
+          "match": "\\b([a-z_][a-zA-Z0-9_]*)\\s*(:)\\s*([A-Z][a-zA-Z0-9_]*)\\s*(;)",
+          "captures": {
+            "1": {"name": "variable.other.module.limbo"},
+            "2": {"name": "punctuation.separator.key-value.limbo"},
+            "3": {"name": "entity.name.module.limbo"},
+            "4": {"name": "punctuation.terminator.statement.limbo"}
+          }
+        },
+        {
+          "name": "variable.other.module.limbo",
+          "match": "\\b([a-z_][a-zA-Z0-9_]*)(?=\\s*:\\s*[A-Z][a-zA-Z0-9_]*;)"
+        }
+      ]
+    },
+    "tuple-declaration": {
+      "patterns": [
+        {
+          "name": "meta.tuple.declaration.limbo",
+          "match": "(\\([^)]*\\))\\s*(:)\\s*(\\w+)",
+          "captures": {
+            "1": {"name": "meta.tuple.limbo variable.parameter.limbo"},
+            "2": {"name": "punctuation.separator.key-value.limbo"},
+            "3": {"name": "storage.type.builtin.limbo entity.name.type.adt.limbo"}
           }
         }
       ]
@@ -149,15 +233,19 @@
       "patterns": [
         {
           "name": "keyword.operator.channel.limbo",
-          "match": "<-|=>"
+          "match": "<-|=>|<-="
         },
         {
-          "name": "keyword.operator.module.limbo",
+          "name": "keyword.operator.module-access.limbo",
           "match": "->"
         },
         {
           "name": "keyword.operator.assignment.limbo",
           "match": ":="
+        },
+        {
+          "name": "keyword.operator.assignment.compound.limbo",
+          "match": "\\+=|\\-=|\\*=|/=|%=|&=|\\|=|\\^=|<<=|>>="
         },
         {
           "name": "keyword.operator.assignment.simple.limbo",
@@ -169,23 +257,31 @@
         },
         {
           "name": "keyword.operator.logical.limbo",
-          "match": "&&|\\|\\||!|&|\\||\\^"
-        },
-        {
-          "name": "keyword.operator.arithmetic.limbo",
-          "match": "\\+|\\-|\\*|\\/|%|\\+\\+|\\-\\-|\\+=|\\-=|\\*=|/=|%="
-        },
-        {
-          "name": "keyword.operator.exponent.limbo",
-          "match": "\\*\\*"
+          "match": "&&|\\|\\||!"
         },
         {
           "name": "keyword.operator.bitwise.limbo",
-          "match": "~|<<|>>|&=|\\|=|\\^=|<<=|>>="
+          "match": "&|\\||\\^|~|<<|>>"
         },
         {
-          "name": "punctuation.separator.limbo",
-          "match": ";|,|:"
+          "name": "keyword.operator.arithmetic.limbo",
+          "match": "\\+|\\-|\\*|\\/|%|\\+\\+|\\-\\-|\\*\\*"
+        },
+        {
+          "name": "keyword.operator.list.cons.limbo",
+          "match": "::"
+        },
+        {
+          "name": "punctuation.separator.statement.limbo",
+          "match": ";"
+        },
+        {
+          "name": "punctuation.separator.comma.limbo",
+          "match": ","
+        },
+        {
+          "name": "punctuation.separator.colon.limbo",
+          "match": ":"
         }
       ]
     },
@@ -193,11 +289,15 @@
       "patterns": [
         {
           "name": "variable.other.module.limbo",
-          "match": "[a-z_][a-zA-Z0-9_]*(?=->)"
+          "match": "\\b[a-z_][a-zA-Z0-9_]*(?=->)"
         },
         {
-          "name": "keyword.operator.arrow.limbo",
-          "match": "->"
+          "name": "entity.name.function.module.limbo",
+          "match": "(?<=->)[a-z_][a-zA-Z0-9_]*\\b"
+        },
+        {
+          "name": "entity.name.type.adt.field.limbo",
+          "match": "(?<=->)[a-z_][a-zA-Z0-9_]*\\b"
         }
       ]
     }
