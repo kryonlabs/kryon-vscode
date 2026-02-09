@@ -3,13 +3,17 @@
   "patterns": [
     {"include": "#comments"},
     {"include": "#block-keywords"},
-    {"include": "#self-closing-tags"},
+    {"include": "#ui-keywords"},
     {"include": "#properties"},
+    {"include": "#multilingual-properties"},
     {"include": "#strings"},
     {"include": "#inline-markup"},
+    {"include": "#lang-blocks"},
     {"include": "#brackets"},
     {"include": "#operators"},
-    {"include": "#list-items"}
+    {"include": "#list-items"},
+    {"include": "#nav-entries"},
+    {"include": "#code-blocks"}
   ],
   "repository": {
     "comments": {
@@ -20,13 +24,17 @@
       "name": "keyword.control.ktml",
       "match": "\\b(Site|Header|Nav|Section|Text|Note|Code|List)\\b"
     },
-    "self-closing-tags": {
-      "name": "entity.name.tag.self-closing.ktml",
-      "match": "\\b(Title)\\b"
+    "ui-keywords": {
+      "name": "entity.name.tag.ui.ktml",
+      "match": "\\b(Window|Center|Button|Panel|Grid|Row|Column|Input|Label|Image|Video|Audio|Canvas|Div|Span|H1|H2|H3|P|A|Form|Table|TR|TD|TH)\\b"
     },
     "properties": {
       "name": "variable.parameter.property.ktml",
-      "match": "\\b(title|tagline|theme)\\b(?=\\s*=)"
+      "match": "\\b(title|tagline|theme|themes|theme-switcher|minify|default-lang|languages|lang-switcher|width|height|text|onClick|onLoad|onSubmit|src|href|id|class|style|disabled|placeholder|type|name|value|rows|cols|target|rel|alt|title)\\b(?=\\s*=)"
+    },
+    "multilingual-properties": {
+      "name": "variable.parameter.property.i18n.ktml",
+      "match": "\\b(title|tagline|text|label|placeholder|alt|description):(de|es|pt|zh|ja|fr|it|ru|ar|ko|nl|pl|tr|sv|da|fi|no|cs|el|he|th|vi|id|ms|hi|bn)\\b(?=\\s*=)"
     },
     "strings": {
       "name": "string.quoted.double.ktml",
@@ -52,6 +60,30 @@
           "end": "\\[\\/i\\]"
         },
         {
+          "name": "markup.underline.ktml",
+          "begin": "\\[u\\]",
+          "end": "\\[\\/u\\]"
+        },
+        {
+          "name": "markup.strikethrough.ktml",
+          "begin": "\\[s\\]",
+          "end": "\\[\\/s\\]"
+        },
+        {
+          "name": "markup.code.ktml",
+          "begin": "\\[code\\]",
+          "end": "\\[\\/code\\]"
+        },
+        {
+          "name": "markup.raw.ktml",
+          "begin": "\\[raw\\]",
+          "end": "\\[\\/raw\\]"
+        },
+        {
+          "name": "entity.name.function.inline.ktml",
+          "match": "\\[\\w+(?:\\.[\\w.]+)?\\(.*?\\)\\]"
+        },
+        {
           "name": "markup.link.ktml",
           "begin": "\\[Link\\s+\"",
           "end": "\"\\s+\"[^\"]*\"\\]",
@@ -64,23 +96,62 @@
         }
       ]
     },
+    "lang-blocks": {
+      "name": "meta.i18n.block.ktml",
+      "begin": "(\\[Lang\\s+\")([a-z]{2}(-[A-Z]{2})?)(\")",
+      "end": "(\\[\\/Lang\\])",
+      "beginCaptures": {
+        "1": {"name": "punctuation.definition.lang.begin.ktml"},
+        "2": {"name": "constant.language.code.ktml"},
+        "4": {"name": "punctuation.definition.lang.begin.ktml"}
+      },
+      "endCaptures": {
+        "1": {"name": "punctuation.definition.lang.end.ktml"}
+      },
+      "patterns": [
+        {"include": "#inline-markup"},
+        {"include": "source.ktml"}
+      ]
+    },
     "brackets": {
       "patterns": [
         {"name": "punctuation.definition.block.begin.ktml", "match": "\\{"},
         {"name": "punctuation.definition.block.end.ktml", "match": "\\}"},
-        {"name": "punctuation.definition.nav.begin.ktml", "match": "\\[(?!/?[bi]\\]|/?Link\\s)"},
-        {"name": "punctuation.definition.nav.end.ktml", "match": "\\](?!</[bi]|Link)"}
+        {"name": "punctuation.definition.nav.begin.ktml", "match": "\\[(?!/?[bi]\\]|/?Link\\s|/?[Ll]ang|/?[uus]\\]|/?code\\]|/?raw\\])"},
+        {"name": "punctuation.definition.nav.end.ktml", "match": "\\](?!</[bi]|Link|[Ll]ang|[uus]|code|raw)"}
       ]
     },
     "operators": {
       "patterns": [
         {"name": "keyword.operator.assignment.ktml", "match": "(?<=\\s)=(?=\\s)"},
-        {"name": "punctuation.separator.key-value.ktml", "match": ":"}
+        {"name": "punctuation.separator.key-value.ktml", "match": "(?<=\\w):(?=[a-z]{2}\\s*=)"}
       ]
     },
     "list-items": {
       "name": "punctuation.definition.list-item.ktml",
       "match": "^\\s*-\\s"
+    },
+    "nav-entries": {
+      "name": "meta.nav.entry.ktml",
+      "begin": "^\\s*\"",
+      "end": "\":\\s*",
+      "patterns": [
+        {
+          "name": "entity.name.label.nav.ktml",
+          "match": "[^\"]+"
+        }
+      ]
+    },
+    "code-blocks": {
+      "name": "meta.code.block.ktml",
+      "begin": "(Code\\s+\")([^\"]+)(\"\\s*\\{)",
+      "end": "\\}",
+      "beginCaptures": {
+        "1": {"name": "keyword.control.ktml"},
+        "2": {"name": "constant.language.code.ktml"},
+        "3": {"name": "punctuation.definition.block.begin.ktml"}
+      },
+      "contentName": "source.$2"
     }
   }
 }

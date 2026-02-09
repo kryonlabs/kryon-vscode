@@ -24,13 +24,21 @@
         "id": "limbo",
         "aliases": ["Limbo", "limbo"],
         "extensions": [".b"],
-        "configuration": "./language-configuration-limbo.json"
+        "configuration": "./language-configuration-limbo.json",
+        "icon": {
+          "light": "./icons/limbo.png",
+          "dark": "./icons/limbo.png"
+        }
       },
       {
         "id": "ktml",
         "aliases": ["KTML", "Kryon Text Markup Language"],
         "extensions": [".ktml"],
-        "configuration": "./language-configuration-ktml.json"
+        "configuration": "./language-configuration-ktml.json",
+        "icon": {
+          "light": "./icons/ktml.png",
+          "dark": "./icons/ktml.png"
+        }
       }
     ],
     "grammars": [
